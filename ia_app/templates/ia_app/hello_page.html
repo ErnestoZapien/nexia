@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" type="text/css" media="screen,projection" />
+    <script src="https://code.jquery.com/jquery-3.6.3.js"
+        integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="chatbox">
+            <div class="top-bar">
+                <div class="avatar">
+                    <p>S</p>
+                </div>
+                <div class="name">Satech Bot AI</div>
+                <div class="icons">
+                    <i class="fas fa-phone"></i>
+                    <i class="fas fa-video"></i>
+                </div>
+                <div class="menu">
+                    <div class="dots"></div>
+                </div>
+            </div>
+            <div class="middle">
+                <div class="voldemort">
+                    <div class="incoming">
+                        <div class="bubble">Hey, Father's Day is coming up..</div>
+                        <div class="bubble">What are you getting.. Oh, oops sorry dude.</div>
+                    </div>
+                    <div class="outgoing">
+                        <div class="bubble lower">Nah, it's cool.</div>
+                        <div class="bubble">Well you should get your Dad a cologne. Here smell it. Oh wait! ...</div>
+                    </div>
+                    <div class="typing">
+                        <div class="bubble">
+                            <div class="ellipsis one"></div>
+                            <div class="ellipsis two"></div>
+                            <div class="ellipsis three"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-bar">
+                <div class="chat">
+                    <input type="text" placeholder="Type a message..." />
+                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(".person").on('click', function () {
+            $(this).toggleClass('focus').siblings().removeClass('focus');
+        })
+    </script>
+</body>
+
+</html>

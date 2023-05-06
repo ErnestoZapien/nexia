@@ -1,0 +1,435 @@
+{% extends 'ia_app/base/base_page.html' %}
+
+{% block title %}
+<h1 class="text-white">ChatBots</h1>
+{% endblock %}
+
+{% block content %}
+<script>
+    var csrf = '{{ csrf_token }}';
+</script>
+
+<style>
+    .img-chatbot {
+        width: 50px !important;
+    }
+
+    .uploadcare--widget__button {
+        width: 215px !important;
+        height: 41px !important;
+    }
+
+    .green {
+        color: #5EBD3E;
+    }
+
+    #card-qna {
+        height: 53vh !important;
+        overflow-y: scroll !important;
+    }
+
+    #card-simulation {
+        height: 53vh !important;
+        overflow-y: scroll !important;
+    }
+
+    input.nosubmit {
+        padding: 9px 4px 9px 40px;
+        background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 13px center;
+    }
+
+    .tab {
+        display: none
+    }
+
+    .step {
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #5EBD3E !important;
+        border: none;
+        border-radius: 50%;
+        display: inline-block;
+        opacity: 0.5
+    }
+
+    .step.active {
+        opacity: 1
+    }
+
+    .step.finish {
+        background-color: #4CAF50
+    }
+
+    .all-steps {
+        text-align: center;
+        margin-top: -.4rem !important;
+        margin-bottom: .8rem !important;
+    }
+</style>
+
+<div class="d-flex flex-column flex-column-fluid">
+    <div class="content fs-6 d-flex flex-column-fluid" id="kt_content">
+        {% if bots %}
+        <div class="container-fluid">
+            <div class="row mt-4 mb-2">
+                <div align="right" style="float:right">
+                    <button class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#modal-agregar">Agregar</button>
+                </div>
+                <div class="col-12 mt-4">
+                    <div class="card bd-white">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table-bots" class="table table-striped table-hover">
+                                    <thead class="text-center">
+                                        <tr style="color: #5EBD3E;">
+                                            <th scope="col" class="fw-bold">IMAGEN</th>
+                                            <th scope="col" class="fw-bold">NOMBRE</th>
+                                            <th scope="col" class="fw-bold">ESTATUS</th>
+                                            <th scope="col" class="fw-bold">SKILLS</th>
+                                            <th scope="col" class="fw-bold">ACCIONES</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+                                        {% for bot in bots %}
+                                        <tr>
+                                            <td>
+                                                <a data-fancybox="{{ bot.id }}" href="{{ bot.imagen }}">
+                                                    <img src="{{ bot.imagen }}" class="img-chatbot">
+                                                </a>
+                                            </td>
+                                            <td>{{bot.nombre}}</td>
+                                            {% if bot.status == True %}
+                                            <td>Activo</td>
+                                            {% endif %}
+                                            <td>
+                                                <a data-bs-placement="top" title="Habilidades"
+                                                    onclick="modalSkill('{{bot.id}}')" data-bs-toggle="modal"
+                                                    data-bs-target="#modal-skill" class="btn btn-info">
+                                                    <i class="fa-solid fa-receipt me-0"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a data-bs-placement="top" title="Editar"
+                                                    onclick="modalEditar('{{bot.id}}')" data-bs-toggle="modal"
+                                                    data-bs-target="#modal-editar" class="btn btn-success">
+                                                    <i class="fa-solid fa-pen me-0"></i>
+                                                </a>
+                                                <a data-bs-placement="top" title="Eliminar"
+                                                    onclick="eliminar('{{bot.id}}')" class="btn btn-danger">
+                                                    <i class="fa-solid fa-trash me-0"></i>
+                                                </a>
+                                                <a data-bs-placement="top" title="API" class="btn btn-info">
+                                                    <i class="fa-solid fa-robot me-0"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="container-fluid">
+            <div class="row mt-4 mb-2">
+                <div align="right" style="float:right">
+                    <button class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#modal-agregar">Agregar</button>
+                </div>
+                <div class="col-12 mt-4">
+                    <br><br><br><br>
+                    <h2 class="text-center mt-4">
+                        A&uacute;n no tienes ChatBots registrados
+                    </h2>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal agregar -->
+<div class="modal fade" id="modal-agregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-agregarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-agregarLabel">Registrar ChatBot</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    {% csrf_token %} <!-- Es necesario para insertar un registro a la DB -->
+                    <!-- El identificador es el name NO el id -->
+                    <div class="row mt-2 mb-4">
+                        <div class="col-6">
+                            <label for="imagen">
+                                <i class="fa-regular fa-image text-primary ms-2"></i>&nbsp;Imagen
+                            </label><br>
+                            <!-- <input required type="text" class="form-control" id="imagen" name="imagen"> -->
+                            <input type="hidden" required class="btn" role="uploadcare-uploader" data-clearable="true"
+                                class="custom-progress" name="uploadcare" id="uploadcare" />
+                        </div>
+                        <div class="col-6">
+                            <label for="nombre">
+                                <i class="fa-regular fa-user text-primary ms-2"></i>&nbsp;Nombre
+                            </label>
+                            <input required type="text" class="form-control" id="nombre" name="nombre">
+                        </div>
+                    </div>
+                    <div class="row mb-4 mt-2">
+                        <div class="col-6">
+                            <label for="tema">
+                                <i class="fa-solid fa-robot text-primary"></i>&nbsp;Tema
+                            </label>
+                            <input required type="text" class="form-control" id="tema" name="tema">
+                        </div>
+                        <div class="col-6">
+                            <label for="cliente">
+                                <i class="fa-solid fa-briefcase text-primary ms-2"></i>&nbsp;Cliente
+                            </label>
+                            <select required name="cliente" id="cliente" class="form-control">
+                                {% for emp in empresa %}
+                                <option value="{{ emp.id }}">{{ emp.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4 mt-2">
+                        <label for="descripcion">
+                            <i class="fa-solid fa-file-lines text-primary ms-2"></i>&nbsp;Descripci&oacute;n
+                        </label>
+                        <div class="col-12">
+                            <textarea required name="descripcion" class="form-control" id="descripcion" cols="60"
+                                rows="5"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" onclick="registrarBot()" class="btn btn-primary">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal editar -->
+<div class="modal fade" id="modal-editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-editarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-editarLabel">Actualizar ChatBot</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    {% csrf_token %} <!-- Es necesario para insertar un registro a la DB -->
+                    <!-- El identificador es el name NO el id -->
+                    <div class="row mt-2 mb-4">
+                        <div class="col-6">
+                            <label for="imagen">
+                                <i class="fa-regular fa-image text-primary ms-2"></i>&nbsp;Imagen
+                            </label><br>
+                            <!-- <input type="text" class="form-control" id="imagen-editar" name="imagen-editar"> -->
+                            <input type="hidden" class="btn" role="uploadcare-uploader" data-clearable="true"
+                                class="custom-progress" name="uploadcare-editar" id="uploadcare-editar" />
+                        </div>
+                        <div class="col-6">
+                            <label for="nombre">
+                                <i class="fa-regular fa-user text-primary ms-2"></i>&nbsp;Nombre
+                            </label>
+                            <input type="text" class="form-control" id="nombre-editar" name="nombre-editar">
+                        </div>
+                    </div>
+                    <div class="row mb-4 mt-2">
+                        <div class="col-6">
+                            <label for="tema">
+                                <i class="fa-solid fa-robot text-primary"></i>&nbsp;Tema
+                            </label>
+                            <input type="text" class="form-control" id="tema-editar" name="tema-editar">
+                        </div>
+                        <div class="col-6">
+                            <label for="cliente">
+                                <i class="fa-solid fa-briefcase text-primary ms-2"></i>&nbsp;Cliente
+                            </label>
+                            <select name="cliente-editar" id="cliente-editar" class="form-control">
+                                {% for emp in empresa %}
+                                <option value="{{ emp.id }}">{{ emp.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4 mt-2">
+                        <label for="descripcion">
+                            <i class="fa-solid fa-file-lines text-primary ms-2"></i>&nbsp;Descripci&oacute;n
+                        </label>
+                        <div class="col-12">
+                            <textarea name="descripcion-editar" class="form-control" id="descripcion-editar" cols="60"
+                                rows="5"></textarea>
+                        </div>
+                    </div>
+                    <input type="text" name="id" id="id" hidden>
+                    <input type="text" name="id_tema" id="id_tema" hidden>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="actualizarBot()">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal skills -->
+<div class="modal fade" id="modal-skill" tabindex="-1" aria-labelledby="modal-skillLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title w-100" id="modal-skillLabel">Configuraci&oacute;n</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <form id="" action="">
+                            <div class="all-steps" id="all-steps">
+                                <span class="step"></span> <span class="step"></span>
+                            </div>
+                            <div class="tab">
+                                <h3 class="text-center mt-3">
+                                    Habilidades del Bot
+                                </h3><br>
+                                <div class="row mt-3 mb-4">
+                                    <div class="col-6 text-center">
+                                        <label for="" class="mb-2 fs-4">
+                                            Descripci&oacute;n del Bot
+                                        </label>
+                                        <textarea
+                                            placeholder="Ejem. Eres un chatbot para ayudar y respoder preguntas referentes a ventas digitales de computadoras."
+                                            style="resize: none;" class="form-control" name="txtConfig" id="txtConfig"
+                                            cols="10" rows="8"></textarea>
+                                        <label for="" class="mt-4 mb-2 fs-4">
+                                            Respuesta bloqueada
+                                        </label>
+                                        <input placeholder="Respuesta a pregunta bloqueada" type="text"
+                                            class="form-control w-100" id="txtAnsBloc" name="txtAnsBloc">
+                                    </div>
+                                    <div class="col-6 text-center align-middle">
+                                        <label for="" class="mb-2 fs-4">
+                                            Lenguaje
+                                        </label>
+                                        <select class="form-select" id="multiple-select-field"
+                                            data-placeholder="Seleccionar" multiple>
+                                            <option value="Espanol">Español</option>
+                                            <option value="Ingles">Ingl&eacute;s</option>
+                                            <option value="Frances">Franc&eacute;s</option>
+                                            <option value="Chino">Chino</option>
+                                            <option value="Ruso">Ruso</option>
+                                            <option value="Portugues">Portugu&eacute;s</option>
+                                        </select>
+                                        <label for="" class="mt-4 mb-2 fs-4">
+                                            Bloqueo de palabras
+                                        </label>
+                                        <textarea
+                                            placeholder="Ejem. No podras contestar mas sobre otro tema que no sean ventas digitales de computadora"
+                                            style="resize: none;" class="form-control" name="txtBloc" id="txtBloc"
+                                            cols="30" rows="8"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab">
+                                <div class="row">
+                                    <input type="text" hidden id="id_bot" name="id_bot">
+                                    <div class="col-8">
+                                        <div class="row mb-3">
+                                            <div class="col-5">
+                                                <input type="text" class="form-control" name="txtQuestion"
+                                                    id="txtQuestion" placeholder="Pregunta">
+                                            </div>
+                                            <div class="col-5">
+                                                <input type="text" class="form-control" name="txtAnswer" id="txtAnswer"
+                                                    placeholder="Respuesta">
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="btn-toolbar">
+                                                    <button type="button" id="btnAddQNA" class="btn btn-info w-50">
+                                                        <i class="fa-solid fa-plus mx-0"></i>
+                                                    </button>
+                                                    <button type="button" id="btnRefreshQNA"
+                                                        class="btn btn-warning w-50">
+                                                        <i class="fa-solid fa-rotate-right mx-0"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-12">
+                                                <div class="card border border-primary">
+                                                    <div class="card-body" id="card-qna">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <input type="search" class="form-control w-100 nosubmit"
+                                                    placeholder="Buscar...">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row mb-4">
+                                            <div class="col-12">
+                                                <input type="text" class="form-control w-100"
+                                                    placeholder="Simular pregunta">
+                                                <button onclick="simulator()" type="button"
+                                                    class="mt-2 btn btn-info w-100">
+                                                    Simulaci&oacute;n
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="card border border-primary">
+                                                    <div class="card-body" id="card-simulation">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div style="overflow:auto;" id="nextprevious">
+                    <div style="float:right;">
+                        <button type="button" class="btn btn-danger" id="prevBtn"
+                            onclick="nextPrev(-1)">Regresar</button>
+                        <button type="button" class="btn btn-primary" id="nextBtn"
+                            onclick="nextPrev(1)">Siguiente</button>
+                        <button type="button" class="btn btn-primary" id="addBot" onclick="addBot()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+<script src="../static/js/bots.js"></script>
+
+{% endblock %}
