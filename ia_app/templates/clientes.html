@@ -40,14 +40,6 @@
                 <div class="col-xxl-12 gy-0 gy-xxl-8 mt-4">
                     <div class="card card mb-5 mb-xxl-8 mt-3">
                         <div class="card-body">
-
-                            <div style="float:right">
-                                <button class="btn btn-success" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal"><i class="fas fa-plus"></i>&nbsp;Agregar</button>
-                            </div>
-
-                            <br><br><br><br>
-
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead class="text-center">
@@ -70,10 +62,15 @@
                                             <td>{{ cliente.estatus }}</td>
                                             <td>
 
-                                                <a class="btn btn-warning" onclick="obtenerCliente('{{cliente.id}}')"><i class="fas fa-pen-to-square"></i>&nbsp;Editar</a>
+                                                {% if cliente.estatus == 1 %}
+                                                    <a class="btn btn-warning" onclick="obtenerCliente('{{cliente.id}}')"><i class="fas fa-pen-to-square"></i>&nbsp;Editar</a>
 
-                                                <a class="btn btn-danger" onclick="eliminarCliente('{{cliente.id}}')"><i class="fas fa-regular fa-trash"></i>&nbsp;Eliminar</a>
+                                                    <button  class="btn btn-info" onclick="desactivarCliente('{{cliente.id}}')"><i class="fa fa-circle-xmark"></i>&nbsp;Desactivar</button>
+                                                {% else %}
+                                                    <a class="btn btn-primary" onclick="activarCliente('{{cliente.id}}')"><i class="fas fa-check"></i>&nbsp;Activar</a>
 
+                                                    <button  class="btn btn-danger" onclick="eliminarCliente('{{cliente.id}}')"><i class="fas fa-regular fa-trash"></i>&nbsp;Eliminar</button>
+                                                {% endif %}
                                             </td>
                                         </tr>
                                         {% endfor %}
@@ -128,6 +125,12 @@
                         <input type="email" class="form-control" id="email" name="email" required>
                     </div>
 
+                    <div class="mb-6">
+                        <label for="password" class="form-label"><i
+                                class="bi bi-envelope text-primary"></i>&nbsp;Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn btn-primary" onclick="agregarCliente();">Registrar Cliente</button>
@@ -180,12 +183,10 @@
                     </div>
 
                     <div class="mb-6">
-                        <label for="estatus" class="form-label"><i
-                                class="bi bi-envelope text-primary"></i>&nbsp;Estatus</label>
-                        <select class="form-select" id="estatusEdit" name="estatusEdit" required>
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
+                        <label for="password" class="form-label"><i
+                                class="bi bi-envelope text-primary"></i>&nbsp;Contraseña</label>
+                        <input type="password" class="form-control" id="passwordEdit" name="passwordEdit" required>
+                    </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

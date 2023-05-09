@@ -38,12 +38,13 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('mensaje', models.TextField()),
+                ('fecha', models.DateTimeField(auto_now_add=True)),
                 ('bot', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ia_app.bot')),
             ],
         ),
         migrations.AddField(
             model_name='bot',
-            name='tema_id',
+            name='tema',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ia_app.tema'),
         ),
     ]

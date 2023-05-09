@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-8)ft8s**v@s1#pv2$9ihf)iv5=h(g-6$*s9rch1l61hw7eu3wj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,10 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'ia_app',
     'sass_processor',
     'rest_framework',
     'rest_framework_simplejwt',
+    'sslserver',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +59,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost',
+    'http://localhost:3000',
+    'http://localhost:4200',
+    'http://localhost:8000',
+    'http://3.229.53.151:8000',
+)
 
 ROOT_URLCONF = 'ia_app.urls'
 
@@ -85,10 +97,10 @@ WSGI_APPLICATION = 'ia_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ia_app',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'NAME': 'wsmprast_nexia',
+        'USER': 'wsmprast_user_nexia',
+        'PASSWORD': 'iDod%W;1yb%3',
+        'HOST': 'mco30.prodns.mx',
         'PORT': '3306',
     }
 }
@@ -201,3 +213,8 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+SECURE_SSL_REDIRECT=False
+SESSION_COOKIE_SECURE=False
+CSRF_COOKIE_SECURE=False
+CORS_ORIGIN_ALLOW_ALL = True

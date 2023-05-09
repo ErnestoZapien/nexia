@@ -62,10 +62,17 @@ urlpatterns = [
     path('bots/create', bots_view.create),
     path('bots/editar', bots_view.edit),
     path('bots/editInfo', bots_view.editInfo),
-    path('bots/delete', bots_view.delete),
+    path('bots/off', bots_view.off),
     path('bots/skills', bots_view.config),
+    path('bots/simulator', bots_view.simulator),
+    path('bots/modaledit', bots_view.modalEdit),
+    path('bots/setBtn', bots_view.settingsBtn),
+    path('bots/addBtn', bots_view.addButton),
+    path('bots/activate', bots_view.activate),
+    path('bots/delete', bots_view.delete),
+    path('generarToken/obtener', auth_view.generarToken),
 
-    path('msg/create', msg_view.msgBot),
+    # path('msg/create', msg_view.msgBot),
 
     # path('bots', bots_view.bots),
 

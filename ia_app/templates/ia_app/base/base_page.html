@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head>
+	
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,8 +12,11 @@
 	<meta name="robots" content="index, follow" />
 	<meta name="author" content="Satech" />
 	<meta name="og:title" content="Chat Session" />
+
 	<link rel="shortcut icon" href="/static/media/logos/mstile-150x150.png" type="image/x-icon">
+
 	<title>NEXAI</title>
+
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
 		integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
@@ -26,115 +30,14 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
 	<link rel="stylesheet"
 		href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-	<style>
-		.fw-bold {
-			font-weight: 700 !important;
-		}
+	<link rel="stylesheet" href="/static/css/main.css">
 
-		.droplist {
-			list-style: none;
-		}
-
-		.menu-title {
-			font-size: 18px;
-		}
-
-		.menu-link .menu-title {
-			color: #fff !important;
-		}
-
-		.menu-link .menu-title:hover {
-			color: #5EBD3E !important;
-		}
-
-		.icon-title {
-			font-size: 18px;
-			margin: 1.5rem;
-			color: #5EBD3E;
-		}
-
-		.droplist-item {
-			font-size: 16px;
-			color: #fff;
-			cursor: pointer;
-		}
-
-		.droplist-item:hover {
-			color: #5EBD3E;
-		}
-
-		#getting-started-collapse {
-			background-color: #434B4D;
-		}
-
-		.aside-workspace {
-			background-color: #434B4D;
-		}
-
-		.logo-nav {
-			margin-top: -2rem;
-			width: 100%;
-		}
-
-		.menu {
-			margin-top: -4rem;
-		}
-
-		.bg-gris {
-			background: #434B4D;
-		}
-
-		.menu-item.active {
-			background-color: #000;
-		}
-
-		.notification-title {
-			font-size: 17px;
-			color: #fff;
-		}
-
-		.menu-link.notification:hover {
-			background-color: #fff !important;
-		}
-
-		.menu-link.notification:hover .notification-title {
-			color: #000 !important;
-		}
-
-		.tab-submenu {
-			color: #fff !important;
-		}
-
-		.tab-submenu:hover {
-			color: #5EBD3E !important;
-		}
-
-		.border-bottom {
-			border-bottom: 1px solid #5EBD3E !important;
-		}
-
-		.border-top {
-			border-top: 1px solid #5EBD3E !important;
-		}
-
-		.border-end {
-			border-right: 1px solid #5EBD3E !important;
-		}
-
-		.menu-user {
-			border-bottom: 1px solid #5EBD3E !important;
-		}
-
-		.svg-color-green svg:hover {
-			fill: #5EBD3E !important;
-		}
-	</style>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 	<script>
 		UPLOADCARE_PUBLIC_KEY = "e9cae0e56d5c846410f6"
 		UPLOADCARE_TABS = "file"
 	</script>
+
 </head>
 
 <body id="kt_body"
@@ -149,7 +52,7 @@
 					<div class="aside-workspace ps-5 pe-4 ps-lg-10 pe-lg-6" id="kt_aside_wordspace">
 						<div class="aside-logo py-2 pb-7" id="kt_aside_logo" align="center">
 							<a onclick="window.location.href='/dashboard'">
-								<img alt="" src="static/media/logos/mstile-150x150.png" class="logo-nav" />
+								<img alt="" src="static/media/logos/nexai.png" class="logo-nav" />
 							</a>
 						</div>
 
@@ -168,6 +71,9 @@
 													</span>
 												</a>
 											</div>
+
+											{% if user.is_superuser %}
+
 											<div class="menu-item active">
 												<a class="menu-link py-2" onclick="window.location.href='/clientes'">
 													<span class="menu-title">
@@ -175,6 +81,8 @@
 													</span>
 												</a>
 											</div>
+
+											{% endif %}
 
 											<div class="menu-item active">
 												<a class="menu-link py-2" data-bs-toggle="collapse"
@@ -248,7 +156,7 @@
 						<div class="d-flex align-items-center">
 							<h3 class="text-dark fw-bolder my-1 fs-2">
 								{% block title %}
-								<h1 class="text-white">Dashboard</h1>
+								<h1 class="txtnxp">Dashboard</h1>
 								{% endblock %}
 							</h3>
 						</div>
@@ -591,24 +499,154 @@
 
 				<div class="d-flex flex-column flex-column-fluid">
 					{% block content %}
+					<br>
 					<div class="container-fluid">
-						<div class="row mt-4 mb-4">
-							<div class="col-12 mt-4">
-								<div class="card">
-									<div class="card-body">
-										<label for="">
-											caman barby les gou pary
-										</label>
+						<div class="row">
+							<div class="col-lg-8">
+								<div id="container">
+
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="container">
+									<div class="card">
+										<div class="card-body">
+											<h2 class="card-title" align="center">Bots activos</h2>
+
+											<div class="d-flex align-content-center justify-content-center">
+												<label style="color:red; font-size: 3rem;" id="numeroBots"></label>
+											<!-- <a onclick="window.location.href='/bots'" class="btn btn-primary">Ver
+												Boots</a> -->
+											</div>
+										</div>
+
+
+										<div class="d-flex align-items-center justify-content-center">
+											<label class="fw-bold" id="tokenLabel"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											<button class="btn btn-primary" onclick="copiarToken();"><i class="far fa-copy"></i></button>
+										</div>
+
+									
+										<input type="text" id="token" readonly hidden>
+									
+										
+										<div class="container" align="right">
+					
+											<br><br>
+
+											<button class="btn btn-primary" onclick="generarToken('{{user.id}}');">Generar Token</button>
+
+										</div>
+
+										<p></p>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+
+					<script src="../../../static/js/dashboard.js"></script>
+
 					{% endblock %}
 				</div>
 			</div>
 		</div>
 	</div>
+
+	{% for b in boton %}
+	{% if b.position == 0 %}
+	<style>
+		.vertical-adjust {
+			margin: 12px 0;
+		}
+
+		.vertical-adjust span,
+		.footer a {
+			line-height: 24px;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.floating {
+			position: fixed;
+			bottom: 64px;
+			left: 64px;
+			z-index: 100;
+		}
+
+		.floating-btn {
+			position: fixed;
+			bottom: 5rem;
+			left: 30px;
+			border-radius: 50%;
+			padding: 11px 17px;
+			border: none;
+			background-color: #1565C0;
+			color: #FFF;
+			box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .14);
+		}
+
+		.icon-add-geo {
+			margin-top: 7px;
+			margin-bottom: -1px;
+			font-size: 19px;
+		}
+	</style>
+
+	<div class="floating">
+		<button class="button floating-btn vertical-adjust">
+			<i class="fa-regular fa-message icon-add-geo me-0"></i>
+		</button>
+	</div>
+
+	{% else %}
+
+	<style>
+		.vertical-adjust2 {
+			margin: 12px 0;
+		}
+
+		.vertical-adjust2 span,
+		.footer a {
+			line-height: 24px;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.floating2 {
+			position: fixed;
+			bottom: 64px;
+			right: 64px;
+			z-index: 20;
+		}
+
+		.floating-btn2 {
+			position: fixed;
+			bottom: 5rem;
+			right: 64px;
+			border-radius: 50%;
+			padding: 11px 17px;
+			border: none;
+			background-color: #1565C0;
+			color: #FFF;
+			box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .14);
+		}
+
+		.icon-add-geo {
+			margin-top: 7px;
+			margin-bottom: -1px;
+			font-size: 19px;
+		}
+	</style>
+
+	<div class="floating2">
+		<button class="button floating-btn2 vertical-adjust2">
+			<i class="fa-regular fa-message icon-add-geo me-0"></i>
+		</button>
+	</div>
+
+	{% endif %}
+	{% endfor %}
 
 	<script src="{% static '/plugins/global/plugins.bundle.js' %}"></script>
 	<script src="{% static '/js/scripts.bundle.js' %}"></script>
@@ -618,6 +656,7 @@
 		integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@jaames/iro/dist/iro.min.js"></script>
 	{% block js %}
 
 	{% endblock %}

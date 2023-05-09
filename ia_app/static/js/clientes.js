@@ -4,12 +4,14 @@ function agregarCliente() {
     const direccion = $('#direccion').val();
     const telefono = $('#telefono').val();
     const email = $('#email').val();
+    const password = $('#password').val();
 
     const data = {
         nombre: nombre,
         direccion: direccion,
         telefono: telefono,
-        email: email
+        email: email,
+        password: password
     }
 
     $.ajax({
@@ -21,25 +23,38 @@ function agregarCliente() {
         data: data,
     }).done(function (response) {
 
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
+        console.log(response);
 
-        Toast.fire({
-            icon: 'success',
-            title: 'Registro agregado correctamente'
-        }).then((result) => {
-            window.location.href = '/clientes';
-        })
+        if (response.error == 1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'El correo electrónico ya está registrado',
+            })
 
+            return;
+
+        } else {
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Registro agregado correctamente'
+            }).then((result) => {
+                window.location.href = '/clientes';
+            })
+        }
     })
 }
 
@@ -91,6 +106,8 @@ const obtenerCliente = (id) => {
 
         $('#modalEditarCliente').modal('show');
 
+        console.log(response);
+
         $('#idEdit').val(response.id);
         $('#nombreEdit').val(response.nombre);
         $('#direccionEdit').val(response.direccion);
@@ -113,6 +130,7 @@ function actualizarCliente() {
     let direccion = $('#direccionEdit').val();
     let telefono = $('#telefonoEdit').val();
     let email = $('#emailEdit').val();
+    let password = $('#passwordEdit').val();
     let estatus = $('#estatusEdit').val();
 
     var data = {
@@ -121,10 +139,9 @@ function actualizarCliente() {
         direccion: direccion,
         telefono: telefono,
         email: email,
+        password: password,
         estatus: estatus
     }
-
-    console.log(data);
 
     $.ajax({
         url: 'clientes/editarCliente',
@@ -179,3 +196,65 @@ function actualizarCliente() {
         })
     });
 }
+
+function activarCliente(id) {
+
+    $.ajax({
+        url: 'clientes/activarCliente?numR=' + id,
+        type: 'POST',
+        headers: {
+            "X-CSRFToken": csrf
+        }
+    }).done(function (response) {
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Cliente activado correctamente'
+        }).then((result) => {
+            window.location.href = '/clientes';
+        })
+    })
+}
+
+function desactivarCliente(id) {
+    
+        $.ajax({
+            url: 'clientes/desactivarCliente?numR=' + id,
+            type: 'POST',
+            headers: {
+                "X-CSRFToken": csrf
+            }
+        }).done(function (response) {
+    
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+    
+            Toast.fire({
+                icon: 'success',
+                title: 'Cliente desactivado correctamente'
+            }).then((result) => {
+                window.location.href = '/clientes';
+            })
+        })
+    }
